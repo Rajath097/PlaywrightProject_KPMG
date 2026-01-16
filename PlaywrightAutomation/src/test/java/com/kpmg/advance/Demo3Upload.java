@@ -10,7 +10,7 @@ import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
-public class Demo1Upload {
+public class Demo3Upload {
 
 	public static void main(String[] args) {
 		Playwright playwright = Playwright.create();
@@ -19,10 +19,16 @@ public class Demo1Upload {
 		BrowserContext context = browser.newContext();
 		//tab 1
 		Page page = context.newPage();
-		page.navigate("https://www.ilovepdf.com/pdf_to_word");
-		//Locating the upload element and uploading the file.
-		page.locator("xpath= //div[@id='uploader']//span[contains(.,'Select PDF file')]").setInputFiles(Paths.get("C:\\automation_session\\DemoPdf.pdf"));
-				
+		
+		page.navigate("https://www.ilovepdf.com/pdf_to_word");		
+
+		//Using file handler
+		page.onFileChooser((fileChooser)-> {
+			fileChooser.setFiles(Paths.get("C:\\automation_session\\DemoPdf.pdf"));
+		});
+		
+		page.locator("xpath= //div[@id='uploader']//span[contains(.,'Select PDF file')]").click();
+		
 		page.waitForTimeout(5000);
 		playwright.close();
 
